@@ -26,12 +26,9 @@ for(i in seq(nrow(exercise1c))[-101]) {
   exercise1c$k_ns[i+1] <- exercise1c$y_ns[i] - exercise1c$c_ns[i]
 }
 
-# Non self-referenced variables are easier to write.
-exercise1c$y <- 
- 
-
-
 # Plot everything.
-plot(exercise1c$t[1:51],exercise1c$y[1:51],type="l",xlab="t",ylab="y",ylim=c(0.0, 0.52),xaxs="i",yaxs="i",lwd=2)
+par(mfrow=c(1,1))
+plot(exercise1c$t[1:51],exercise1c$y[1:51],type="l",
+     main="1.d",xlab="t",ylab="y",ylim=c(0.0, 0.52),xaxs="i",yaxs="i",lwd=2)
 lines(x = exercise1c$t[1:51], y = exercise1c$y_ns[1:51],col="red",lwd=2)
 legend(x="bottomright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1))

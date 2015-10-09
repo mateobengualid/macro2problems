@@ -35,6 +35,7 @@ exercise1c$y <-
 
 
 # Plot everything.
-plot(exercise1c$t[1:26],exercise1c$y[1:26],type="l",xlab="t",ylab="y",ylim=c(0.4, 0.52),xaxs="i",yaxs="i",lwd=2)
+plot(exercise1c$t[1:26],exercise1c$y[1:26],type="l",xlab="t",ylab="y",
+     main="1.e",ylim=c(0.4, 0.52),xaxs="i",yaxs="i",lwd=2)
 lines(exercise1c$t[1:26],exercise1c$y_ns[1:26],col="red",lwd=2)
 legend(x="bottomright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1))

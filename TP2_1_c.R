@@ -23,6 +23,8 @@ iterate <- function(df) {
   return(df)
 }
 
+# This list of gaussian values with mean 0 and sd 0.02 was generated from:
+#https://www.random.org/gaussian-distributions/?num=101&mean=0.0&stdev=0.02&dec=10&col=1&notation=scientific&format=plain&rnd=id.mnb
 exercise1c <- read.csv("~/Projects/facultad/MACRO2/normal_0_002.csv")
 exercise1c$tetha <- rep.int(tetha0, nrow(exercise1c))
 exercise1c$log_tetha <- rep.int(log(tetha0), nrow(exercise1c))

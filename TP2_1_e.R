@@ -3,9 +3,12 @@ alpha <- 0.5
 beta <- 0.952
 ro <- 0.5
 sigma <- 0.02
-k0 <- 0.005
+k0 <- (alpha*beta)**(1.0/(1.0-alpha))
 tetha0 <- 1.0
 
+# This time, €1 (the first one) is 2*sigma and 0 afterwards.
+exercise1c$white_noise_mean_0_sd_d02 <- rep.int(0.0, nrow(exercise1c))
+exercise1c$white_noise_mean_0_sd_d02[1] <- 2 * sigma
 exercise1c$tetha <- rep.int(tetha0, nrow(exercise1c))
 exercise1c$log_tetha <- rep.int(log(tetha0), nrow(exercise1c))
 exercise1c$k <- rep.int(k0, nrow(exercise1c))
@@ -32,6 +35,6 @@ exercise1c$y <-
 
 
 # Plot everything.
-plot(exercise1c$t[1:51],exercise1c$y[1:51],type="l",xlab="t",ylab="y",ylim=c(0.0, 0.52),xaxs="i",yaxs="i",lwd=2)
-lines(x = exercise1c$t[1:51], y = exercise1c$y_ns[1:51],col="red",lwd=2)
+plot(exercise1c$t[1:26],exercise1c$y[1:26],type="l",xlab="t",ylab="y",ylim=c(0.4, 0.52),xaxs="i",yaxs="i",lwd=2)
+lines(exercise1c$t[1:26],exercise1c$y_ns[1:26],col="red",lwd=2)
 legend(x="bottomright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1))

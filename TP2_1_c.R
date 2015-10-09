@@ -7,23 +7,29 @@ k0 <- (alpha*beta)**(1.0/(1.0-alpha))
 tetha0 <- 1.0
 
 exercise1c$tetha <- rep.int(tetha0, nrow(exercise1c))
+exercise1c$log_tetha <- rep.int(log(tetha0), nrow(exercise1c))
 exercise1c$k <- rep.int(k0, nrow(exercise1c))
 exercise1c$k_ns <- rep.int(k0, nrow(exercise1c))
 
 # The only "hard" to write are self-referenced variables.
 for(i in seq(nrow(exercise1c))[-101]) {
-  exercise1c$tetha[i+1] <-
-    (exercise1c$tetha[i] ** ro) * exp(exercise1c$white_noise_mean_0_sd_d02[i])
+  # Stochastic version.
+  exercise1c$log_tetha[i+1] <- ro*exercise1c$log_tetha[i] + exercise1c$white_noise_mean_0_sd_d02[i]
+  exercise1c$tetha[i+1] <- exp(exercise1c$log_tetha[i+1])
+  exercise1c$y[i] <- exercise1c$tetha[i] * (exercise1c$k[i]**alpha)
+  exercise1c$c[i] <- exercise1c$y[i] * (1-alpha*beta)  
+  exercise1c$k[i+1] <- exercise1c$y[i] - exercise1c$c[i]
   
-  exercise1c[i+1,"k"] <- alpha * beta * exercise1c[i,"tetha"] * exercise1c[i+1,"k"] ** alpha
-  exercise1c[i+1,"k_ns"] <- alpha * beta * exercise1c[i+1,"k_ns"] ** alpha
+  # Nonstochastic version.
+  exercise1c$y_ns[i] <- exercise1c$k_ns[i]**alpha
+  exercise1c$c_ns[i] <- exercise1c$y_ns[i] * (1-alpha*beta)
+  exercise1c$k_ns[i+1] <- exercise1c$y_ns[i] - exercise1c$c_ns[i]
 }
 
 # Non self-referenced variables are easier to write.
-exercise1c$y <- exercise1c$tetha * (exercise1c$k**alpha)
-exercise1c$c <- exercise1c$y * (1-alpha*beta)
-exercise1c$y_ns <- exercise1c$k_ns**alpha
-exercise1c$c_ns <- exercise1c$y_ns * (1-alpha*beta)
+exercise1c$y <- 
+ 
+
 
 # Plot everything.
 plot(exercise1c$t,exercise1c$y,type="l",xlab="t",ylab="y",ylim=c(0.0, 0.52),xaxs="i",yaxs="i",lwd=2)

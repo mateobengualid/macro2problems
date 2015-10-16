@@ -1,4 +1,4 @@
-exercise3d <- read.csv("~/Projects/facultad/MACRO2/normal_0_002.csv")
+exercise3d <- read.csv("~/Projects/facultad/MACRO2/TP2/normal_0_002.csv")
 alpha <- 0.5
 g <- 0.02
 sigma <- 0.02

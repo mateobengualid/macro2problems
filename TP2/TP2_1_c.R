@@ -25,14 +25,14 @@ iterate <- function(df) {
 
 # This list of gaussian values with mean 0 and sd 0.02 was generated from:
 #https://www.random.org/gaussian-distributions/?num=101&mean=0.0&stdev=0.02&dec=10&col=1&notation=scientific&format=plain&rnd=id.mnb
-exercise1c <- read.csv("~/Projects/facultad/MACRO2/normal_0_002.csv")
+exercise1c <- read.csv("~/Projects/facultad/MACRO2/TP2/normal_0_002.csv")
 exercise1c$tetha <- rep.int(tetha0, nrow(exercise1c))
 exercise1c$log_tetha <- rep.int(log(tetha0), nrow(exercise1c))
 exercise1c$k <- rep.int(k0, nrow(exercise1c))
 exercise1c$k_ns <- rep.int(k0, nrow(exercise1c))
 exercise1c <- iterate(exercise1c)
 
-exercise1fcI <- read.csv("~/Projects/facultad/MACRO2/normal_0_002.csv")
+exercise1fcI <- read.csv("~/Projects/facultad/MACRO2/TP2/normal_0_002.csv")
 ro <- 0.1
 exercise1fcI$tetha <- rep.int(tetha0, nrow(exercise1fcI))
 exercise1fcI$log_tetha <- rep.int(log(tetha0), nrow(exercise1fcI))
@@ -40,7 +40,7 @@ exercise1fcI$k <- rep.int(k0, nrow(exercise1fcI))
 exercise1fcI$k_ns <- rep.int(k0, nrow(exercise1fcI))
 exercise1fcI <- iterate(exercise1fcI)
 
-exercise1fcII <- read.csv("~/Projects/facultad/MACRO2/normal_0_002.csv")
+exercise1fcII <- read.csv("~/Projects/facultad/MACRO2/TP2/normal_0_002.csv")
 ro <- 0.9
 exercise1fcII$tetha <- rep.int(tetha0, nrow(exercise1fcII))
 exercise1fcII$log_tetha <- rep.int(log(tetha0), nrow(exercise1fcII))

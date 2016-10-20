@@ -12,11 +12,14 @@ gamma <- 0.95 # "A more detailed study of the statistical properties of
 # this technology shock is planned but has not yet been carried out."
 totalPeriods <- 115 # Postwar quarters.
 
+# We introduced a B variable for ease. Calculate it now.
+B <- -A*log(1-H0)/H0
+
 # NSS variables.
 lambdaNSS <- 1 # Unconditional mean.
 rNSS <- (1 - beta + delta*beta)/beta
 wNSS <- (1-theta)*lambdaNSS*(rNSS/theta/lambdaNSS)**(-theta/(1-theta))
-KNSS <- theta*wNSS /((A+1-theta)*rNSS -A*delta*theta)
+KNSS <- theta*wNSS /(B*(rNSS-delta*theta))
 CNSS <- (rNSS/theta - delta)*KNSS
 HNSS <- KNSS * (rNSS/lambdaNSS/theta)**(1/(1-theta))
 INSS <- delta * KNSS
@@ -36,15 +39,15 @@ AA = matrix(c(0, 0, 0, 0, 1, 0))
 
 BB = matrix(c(-1, theta, 0, 0, -(1-delta), 0))
 
-CC = rbind(c( 1,      -1, 1, -YNSS,      0,              0), # Yt)
-           c( 0,       0, 0, +CNSS,      0,             -1), # Ct)
-           c( 0,       0, 0, +INSS, -delta,              0), # It)
-           c( 0, 1-theta,-1,     0,      0, -HNSS/(1-HNSS)), # Ht)
-           c(-1,       0, 0,     0,      0,              0), # rt)
-           c( 0,       0,-1,     0,      0,              1)) # wt)
+CC = rbind(c( 1,      -1, 1, -YNSS,      0, 0), # Yt)
+           c( 0,       0, 0, +CNSS,      0,-1), # Ct)
+           c( 0,       0, 0, +INSS, -delta, 0), # It)
+           c( 0, 1-theta,-1,     0,      0, 0), # Ht)
+           c(-1,       0, 0,     0,      0, 0), # rt)
+           c( 0,       0,-1,     0,      0, 1)) # wt)
 CC <- t(CC) # Get Equations in the rows.
 
-DD = matrix(c( 0, -1, 0, 0, 0, 0))
+DD = matrix(c( 0, 1, 0, 0, 0, 0))
 
 FF = matrix(c(0))
 
@@ -110,27 +113,27 @@ iterate <- function(shocks, k0 = 0, lambda0 = 0, periods = totalPeriods) {
 stationary <- iterate(shocks = rep.int(0,totalPeriods))
 impulse <- iterate(shocks = c(1, rep.int(0,totalPeriods-1)))
 par(mfrow=c(2,4))
-plot(stationary$t,stationary$k,type="l",xlab="Qs",ylab="k%",xaxs="i",yaxs="i",lwd=2)
+plot(stationary$t,stationary$k,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.1,1.2),main="Capital (K)")
 lines(impulse$t,impulse$k,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$lambda,type="l",xlab="Qs",ylab="lambda%",xaxs="i",yaxs="i",lwd=2)
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$lambda,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.1,1.2),main="Technology (Lambda)")
 lines(impulse$t,impulse$lambda,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$y,type="l",xlab="Qs",ylab="y%",xaxs="i",yaxs="i",lwd=2,ylim=c(-2,2))
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$y,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.1,2),main="Product (Y)")
 lines(impulse$t,impulse$y,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$c,type="l",xlab="Qs",ylab="c%",xaxs="i",yaxs="i",lwd=2)
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$c,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.1,1.0),main="Consumption (C)")
 lines(impulse$t,impulse$c,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$i,type="l",xlab="Qs",ylab="i%",xaxs="i",yaxs="i",lwd=2,ylim=c(-5,5))
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$i,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.25,7),main="Investment (I)")
 lines(impulse$t,impulse$i,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$h,type="l",xlab="Qs",ylab="h%",xaxs="i",yaxs="i",lwd=2)
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$h,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.2,1.6),main="Labor (H)")
 lines(impulse$t,impulse$h,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$r,type="l",xlab="Qs",ylab="r%",xaxs="i",yaxs="i",lwd=2,ylim=c(-1.5,1.5))
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$r,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.5,2),main="Interest rate (r)")
 lines(impulse$t,impulse$r,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
-plot(stationary$t,stationary$w,type="l",xlab="Qs",ylab="w%",xaxs="i",yaxs="i",lwd=2)
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
+plot(stationary$t,stationary$w,type="l",xlab="Qs",ylab="% deviation from SS",xaxs="i",yaxs="i",lwd=2,ylim=c(-0.1,1),main="Wage (w)")
 lines(impulse$t,impulse$w,col="red",lwd=2)
-legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.25,bty = "n")
+legend(x="topright",legend=c("Shocks", "No Shocks"),lwd=c(2.5,2.5),col=c("black", "red"), lty=c(1,1),cex=0.4,bty = "n")
